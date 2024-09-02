@@ -1,46 +1,38 @@
 package br.edu.iftm.rastreamento.controller;
-
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import br.edu.iftm.rastreamento.dto.RastreamentoDTO;
+import br.edu.iftm.rastreamento.model.Rastreamento;
 import br.edu.iftm.rastreamento.service.RastreamentoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 
 @RestController
 @RequestMapping("/rastreamentos")
+@Tag(name = "Rastreamento", description = "Endpoint para gerenciar rastreamento.")
+
 public class RastreamentoController {
 
 	@Autowired
 	private RastreamentoService rastreamentoService;
 
-	@GetMapping
-	public List<RastreamentoDTO> getAllRastreamentos() {
-		return rastreamentoService.getAllRastreamentos();
-	}
-
+	
 	@GetMapping("/{id}")
-	public RastreamentoDTO getRastreamentoById(@PathVariable Long id) {
-		RastreamentoDTO rastreamentoDTO = rastreamentoService.getRastreamentoById(id);
-		return rastreamentoDTO;
-	}
-
-	@PostMapping
-	public RastreamentoDTO createRastreamento(@RequestBody RastreamentoDTO rastreamentoDTO) {
-		return rastreamentoService.createRastreamento(rastreamentoDTO);
-	}
-
-	@PutMapping("/{id}")
-	public RastreamentoDTO updateRastreamento(@PathVariable Long id, @RequestBody RastreamentoDTO rastreamentoDTO) {
-		RastreamentoDTO updatedRastreamento = rastreamentoService.updateRastreamento(id, rastreamentoDTO);
-		return updatedRastreamento;
+	@Operation(summary = "Encontra um pacote pelo ID.", description = "Encontra um pacote pelo ID.", tags = {
+			"Usuário" }, responses = {
+					@ApiResponse(description = "Sem conteúdo", responseCode = "204", content = @Content),
+					@ApiResponse(description = "Requisição inválida", responseCode = "400", content = @Content),
+					@ApiResponse(description = "Não autorizado", responseCode = "401", content = @Content),
+					@ApiResponse(description = "Não encontrado", responseCode = "404", content = @Content),
+					@ApiResponse(description = "Erro interno do servidor", responseCode = "500", content = @Content)
+			})
+	public List<Rastreamento> getRastreamentosPacote(@PathVariable Long id) {
+		return rastreamentoService.getRastreamentos(id);
 	}
 
 }
