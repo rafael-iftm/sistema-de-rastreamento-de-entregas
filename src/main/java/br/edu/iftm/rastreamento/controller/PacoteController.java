@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import br.edu.iftm.rastreamento.model.Pacote;
 import br.edu.iftm.rastreamento.service.PacoteService;
-import br.edu.iftm.rastreamento.service.exceptions.NaoAcheiException;
+import br.edu.iftm.rastreamento.service.exceptions.pacoteException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -43,7 +43,8 @@ public class PacoteController {
             @ApiResponse(description = "Não encontrado", responseCode = "404", content = @Content)
     })
     public Pacote getPacoteById(@PathVariable Long id) {
-        Pacote pacote = pacoteService.getPacoteById(id);
+        Pacote pacote = pacoteService.getPacoteById(id).orElseThrow(
+            () -> new pacoteException("Pacote não encontrado"));
         return pacote;
     }
 
@@ -54,7 +55,8 @@ public class PacoteController {
             @ApiResponse(description = "Requisição inválida", responseCode = "400", content = @Content)
     })
     public Pacote updatePacote(@PathVariable Long id, @RequestBody Pacote pacoteDetails) {
-        Pacote pacote = pacoteService.updatePacote(id, pacoteDetails);
+        Pacote pacote = pacoteService.updatePacote(id, pacoteDetails).orElseThrow(
+            () -> new pacoteException("Pacote não encontrado"));
         return pacote;
     }
 

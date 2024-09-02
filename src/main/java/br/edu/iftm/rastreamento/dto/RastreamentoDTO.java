@@ -11,4 +11,8 @@ public class RastreamentoDTO {
 	private String status;
 	private String localizacao;
 
+	public String getResumo() {
+		return "Data/Hora: " + dataHora + " - Localização: " + localizacao + " - Status: " + status;
+	}
+
 }
